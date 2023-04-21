@@ -5,7 +5,7 @@ After=network.target
 User=root
 Group=www-data
 WorkingDirectory=/project
-Environment="PATH=/project/venv/bin"
-ExecStart=/project/venv/bin/gunicorn --bind 0.0.0.0:80 wsgi:app
+Environment="PATH=/usr/local/bin"
+ExecStart=/usr/local/bin/gunicorn --bind 0.0.0.0:80 wsgi:app
 [Install]
 WantedBy=multi-user.target

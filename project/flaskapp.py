@@ -3,9 +3,15 @@ import psycopg2
 
 app = Flask(__name__)
 
+# Set db creds
+database = "flask_db"
+user = "posgres"
+password = "root"
+host = "localhost"
+
 # Connect to the database
-conn = psycopg2.connect(database="flask_db", user="postgres",
-                        password="root", host="localhost", port="5432")
+conn = psycopg2.connect(database=database, user=user,
+                        password=password, host=host, port="5432")
 
 # create a cursor
 cur = conn.cursor()
@@ -32,10 +38,10 @@ conn.close()
 @app.route('/')
 def index():
     # Connect to the database
-    conn = psycopg2.connect(database="flask_db",
-                            user="postgres",
-                            password="root",
-                            host="localhost", port="5432")
+    conn = psycopg2.connect(database=database,
+                            user=user,
+                            password=password,
+                            host=host, port="5432")
 
     # create a cursor
     cur = conn.cursor()
@@ -55,10 +61,10 @@ def index():
 
 @app.route('/create', methods=['POST'])
 def create():
-    conn = psycopg2.connect(database="flask_db",
-                            user="postgres",
-                            password="root",
-                            host="localhost", port="5432")
+    conn = psycopg2.connect(database=database,
+                            user=user,
+                            password=password,
+                            host=host, port="5432")
 
     cur = conn.cursor()
 
@@ -84,10 +90,10 @@ def create():
 
 @app.route('/update', methods=['POST'])
 def update():
-    conn = psycopg2.connect(database="flask_db",
-                            user="postgres",
-                            password="root",
-                            host="localhost", port="5432")
+    conn = psycopg2.connect(database=database,
+                            user=user,
+                            password=password,
+                            host=host, port="5432")
 
     cur = conn.cursor()
 
@@ -108,9 +114,9 @@ def update():
 
 @app.route('/delete', methods=['POST'])
 def delete():
-    conn = psycopg2.connect(database="flask_db", user="postgres",
-                            password="root",
-                            host="localhost", port="5432")
+    conn = psycopg2.connect(database=database, user=user,
+                            password=password,
+                            host=host, port="5432")
     cur = conn.cursor()
 
     # Get the data from the form
