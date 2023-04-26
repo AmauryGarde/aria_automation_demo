@@ -4,8 +4,8 @@ After=network.target
 [Service]
 User=root
 Group=www-data
-WorkingDirectory=/project
+WorkingDirectory=/aria_automation_demo/project
 Environment="PATH=/aria_automation_demo/project/venv/bin"
-ExecStart=/aria_automation_demo/project/venv/bin/gunicorn --bind 0.0.0.0:80 wsgi:app
+ExecStart=/aria_automation_demo/project/venv/bin/gunicorn --bind 0.0.0.0:5000 wsgi:app
 [Install]
 WantedBy=multi-user.target
