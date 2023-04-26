@@ -4,10 +4,10 @@ import psycopg2
 app = Flask(__name__)
 
 # Set db creds
-database = "flask_db"
-user = "posgres"
-password = "root"
-host = "localhost"
+database = "DBNAME"
+user = "ADMINNAME"
+password = "ADMINPASSWORD"
+host = "HOSTNAME"
 
 # Connect to the database
 conn = psycopg2.connect(database=database, user=user,
