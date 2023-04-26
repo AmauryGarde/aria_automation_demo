@@ -1,0 +1,143 @@
+<html>
+<head>
+	<title>CRUD App</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #F2F2F2;
+		}
+
+		h1, h2 {
+			text-align: center;
+			color: #007D92;
+			margin-top: 30px;
+			margin-bottom: 20px;
+		}
+
+		table {
+			border-collapse: collapse;
+			margin: 0 auto;
+			width: 80%;
+			background-color: white;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+			border-radius: 10px;
+			overflow: hidden;
+			margin-bottom: 30px;
+		}
+
+		th, td {
+			border: 1px solid black;
+			padding: 10px;
+			text-align: center;
+		}
+
+		th {
+			background-color: #007D92;
+			color: white;
+		}
+
+		form {
+			display: inline-block;
+			margin-bottom: 0;
+		}
+
+		form input[type="text"], input[type="submit"] {
+			padding: 10px;
+			margin: 4px;
+			border-radius: 4px;
+			border: none;
+			background-color: #78BC20;
+			color: white;
+			font-weight: bold;
+		}
+
+		form input[type="submit"] {
+			cursor: pointer;
+			background-color: #007D92;
+		}
+
+		form input[type="submit"]:hover {
+			background-color: #00707A;
+		}
+
+		.actions {
+			display: flex;
+			justify-content: space-around;
+		}
+
+		form input[type="text"] {
+			background-color: #F2F2F2;
+			color: black;
+			border: 1px solid #007D92;
+		}
+
+		input::placeholder {
+			color: #007D92;
+			font-weight: bold;
+		}
+        form.new-product {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        form.new-product input[type="text"] {
+            margin-right: 10px;
+        }
+        logo-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-bottom: 20px;
+		}
+
+		.vmware-logo {
+			width: 200px;
+			height: auto;
+		}
+	</style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="vmware-logo.png" alt="VMware Logo" class="vmware-logo">
+    </div>
+	<h1>CRUD App</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Price</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for row in data %}
+			<tr>
+				<td>{{ row[0] }}</td>
+				<td>{{ row[1] }}</td>
+				<td>{{ row[2] }}</td>
+				<td class="actions">
+					<form action="/update" method="post">
+					        <input type="hidden" name="id" value="{{ row[0] }}">
+						<input type="text" name="name" value="{{ row[1] }}" placeholder="Name">
+						<input type="text" name="price" value="{{ row[2] }}" placeholder="Price">
+						<input type="submit" value="Update">
+					</form>
+					<form action="/delete" method="post">
+						<input type="hidden" name="id" value="{{ row[0] }}">
+						<input type="submit" value="Delete">
+					</form>
+				</td>
+			</tr>
+				{% endfor %}
+	</tbody>
+</table>
+<h2>Create a new product</h2>
+
+<form class="new-product" action="/create" method="post">
+    <input type="text" name="name" placeholder="Name">
+    <input type="text" name="price" placeholder="Price">
+    <input type="submit" value="Add">
+</form>
+</body>
+</html>
