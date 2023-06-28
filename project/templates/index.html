@@ -1,143 +1,335 @@
+<!DOCTYPE html>
 <html>
 <head>
-	<title>CRUD App</title>
-	<style>
-		body {
-			font-family: Arial, sans-serif;
-			background-color: #F2F2F2;
-		}
-
-		h1, h2 {
-			text-align: center;
-			color: #007D92;
-			margin-top: 30px;
-			margin-bottom: 20px;
-		}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+    <style>
 
 		table {
-			border-collapse: collapse;
-			margin: 0 auto;
-			width: 80%;
-			background-color: white;
-			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-			border-radius: 10px;
-			overflow: hidden;
-			margin-bottom: 30px;
-		}
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
 
-		th, td {
-			border: 1px solid black;
-			padding: 10px;
-			text-align: center;
-		}
+        td, th {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
 
-		th {
-			background-color: #007D92;
-			color: white;
-		}
+        table > tbody > tr > td,
+        table > thead > tr > th {
+            border-top: none;
+        }
 
-		form {
-			display: inline-block;
-			margin-bottom: 0;
-		}
+        table > tbody > tr > td:first-child,
+        table > thead > tr > th:first-child {
+            border-left: none;
+        }
 
-		form input[type="text"], input[type="submit"] {
-			padding: 10px;
-			margin: 4px;
-			border-radius: 4px;
-			border: none;
-			background-color: #78BC20;
-			color: white;
-			font-weight: bold;
-		}
+        table > tbody > tr > td:last-child,
+        table > thead > tr > th:last-child {
+            border-right: none;
+        }
 
-		form input[type="submit"] {
-			cursor: pointer;
-			background-color: #007D92;
-		}
+        table > tbody > tr:last-child > td {
+            border-bottom: none;
+        }
 
-		form input[type="submit"]:hover {
-			background-color: #00707A;
-		}
+        .table-container {
+            border-radius: 10px;
+            border: 2px solid black;
+            overflow: hidden;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            margin: 0 auto;
+            margin-bottom: 30px;
+        }
 
-		.actions {
-			display: flex;
-			justify-content: space-around;
-		}
+        h1, h2 {
+            text-align: left;
+            margin-left: calc(10% + 2px);
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
 
-		form input[type="text"] {
-			background-color: #F2F2F2;
-			color: black;
-			border: 1px solid #007D92;
-		}
+        form input[type="text"], input[type="submit"] {
+            padding: 10px;
+            margin: 4px;
+            border-radius: 4px;
+            border: none;
+            background-color: #0072a3;
+            color: white;
+            /* font-weight: bold; */
+        }
 
-		input::placeholder {
-			color: #007D92;
-			font-weight: bold;
-		}
+        form input[type="submit"] {
+            cursor: pointer;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #00707A;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        form input[type="text"] {
+            background-color: #F2F2F2;
+            color: black;
+            border: 1px solid #007D92;
+        }
+
+        input::placeholder {
+            color: black;
+            /* font-weight: bold; */
+        }
+
         form.new-product {
             display: flex;
             justify-content: center;
             align-items: center;
         }
+
         form.new-product input[type="text"] {
             margin-right: 10px;
         }
-        logo-container {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			margin-bottom: 20px;
-		}
 
-		.vmware-logo {
-			width: 200px;
-			height: auto;
-		}
-	</style>
+        .logo {
+            margin-right: 10px;
+        }
+
+        .bg-modal {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+        }
+
+        .modal-container {
+            background-color: #F2F2F2;
+            border-radius: 10px;
+            border: 2px solid black;
+            overflow: hidden;
+            overflow: hidden;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            margin: 50px auto;
+            max-width: 500px;
+        }
+
+        .modal-content-wrapper {
+            padding: 20px;
+        }
+
+        .modal-content {
+            padding: 20px;
+        }
+
+        .modal-header--accessible {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title-wrapper {
+            margin-right: 5px;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .modal-body-wrapper {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .modal-body {
+            /* Add any necessary styles */
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 5px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-right: calc(10% + 2px);
+        }
+
+        .table-header h2 {
+            margin-top: 10px;
+        }
+
+        .table-header #add-btn {
+            padding: 10px;
+            border-radius: 4px;
+            border: none;
+            background-color: #0072a3;
+            color: white;
+        }
+
+        .table-header #add-btn:hover {
+            background-color: #00707A;
+        }
+
+        .edit-btn {
+            padding: 10px;
+            border-radius: 4px;
+            border: none;
+            background-color: #0072a3;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background-color: #00707A;
+        }
+
+        .delete-btn {
+            padding: 10px;
+            border-radius: 4px;
+            border: none;
+            background-color: #0072a3;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: #00707A;
+        }
+
+
+    </style>
 </head>
 <body>
-    <div class="logo-container">
-        <img src="vmware-logo.png" alt="VMware Logo" class="vmware-logo">
+<html>
+<head>
+    <title>VMware Data Services Manager & Aria Automation Demo</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
+</head>
+<body>
+<header class="header-6 clr-nav-level-1">
+    <div class="branding">
+        <a class="nav-link" href="/provider-dashboard">
+            <img src="{{ url_for('static',filename='pictures/vmw.png') }}" width="36" height="36" class="logo"
+                 alt="VMware Data Services Manager & Aria Automation Demo">
+            <span id="vmwareProviderTitle" class="title">VMware Data Services Manager & Aria Automation Demo</span>
+        </a>
     </div>
-	<h1>CRUD App</h1>
-	<table>
-		<thead>
-			<tr>
-				<th>ID</th>
-				<th>Name</th>
-				<th>Price</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for row in data %}
-			<tr>
-				<td>{{ row[0] }}</td>
-				<td>{{ row[1] }}</td>
-				<td>{{ row[2] }}</td>
-				<td class="actions">
-					<form action="/update" method="post">
-					        <input type="hidden" name="id" value="{{ row[0] }}">
-						<input type="text" name="name" value="{{ row[1] }}" placeholder="Name">
-						<input type="text" name="price" value="{{ row[2] }}" placeholder="Price">
-						<input type="submit" value="Update">
-					</form>
-					<form action="/delete" method="post">
-						<input type="hidden" name="id" value="{{ row[0] }}">
-						<input type="submit" value="Delete">
-					</form>
-				</td>
-			</tr>
-				{% endfor %}
-	</tbody>
-</table>
-<h2>Create a new product</h2>
-
-<form class="new-product" action="/create" method="post">
-    <input type="text" name="name" placeholder="Name">
-    <input type="text" name="price" placeholder="Price">
-    <input type="submit" value="Add">
-</form>
+</header>
+<div class="table-header">
+    <h2 style="margin-top: 0;">
+        <img src="{{ url_for('static',filename='pictures/product_icon.png') }}" alt="icon"
+             style="height:24px; width:24px; margin-right:10px;">
+        Product Table
+    </h2>
+    <button id="add-btn">Add Product</button>
+</div>
+<div class="table-container">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price $</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in data %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td class="actions">
+                <button class="edit-btn btn btn-primary" data-id="{{ row[0] }}" data-name="{{ row[1] }}" data-price="{{ row[2] }}">Edit</button>
+                <form action="/delete" method="post">
+                    <input type="hidden" name="id" value="{{ row[0] }}">
+                    <button type="submit" class="delete-btn btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="bg-modal">
+    <div class="modal-container">
+        <div class="modal-content-wrapper">
+            <div class="modal-content">
+                <div class="modal-header--accessible">
+                    <div class="modal-title-wrapper">
+                        <h4 class="modal-title">Edit Product</h4>
+                    </div>
+                    <button type="button" class="close">
+                        <cds-icon shape="window-close"></cds-icon>
+                    </button>
+                </div>
+                <div class="modal-body-wrapper">
+                    <div class="modal-body">
+                        <form id="productDetailsForm" class="clr-form clr-form-horizontal">
+                            <div class="clr-row">
+                                <div class="clr-col-12 clr-col-sm-12 clr-col-md-12 clr-col-lg-12 clr-col-xl-12">
+                                    <clr-input-container class="clr-form-control clr-row">
+                                        <label class="clr-col-12 clr-col-sm-12 clr-col-md-12 clr-col-lg-12 clr-col-xl-12 required-field clr-control-label"
+                                               for="productNameId">Product Name</label>
+                                        <div class="clr-control-container clr-col-12 clr-col-sm-12 clr-col-md-12 clr-col-lg-12 clr-col-xl-12 w-95">
+                                            <div class="clr-input-wrapper">
+                                                <input type="text" id="productNameId" name="productName" clrinput=""
+                                                       placeholder="Product Name" required=""
+                                                       class="w-95 ng-pristine ng-invalid clr-input ng-touched">
+                                                <cds-icon shape="exclamation-circle" status="danger" aria-hidden="true"
+                                                          class="clr-validate-icon ng-star-inserted"></cds-icon>
+                                            </div>
+                                        </div>
+                                    </clr-input-container>
+                                </div>
+                            </div>
+                            <div class="clr-row">
+                                <div class="clr-col-12 clr-col-sm-12 clr-col-md-12 clr-col-lg-12 clr-col-xl-12">
+                                    <clr-input-container class="clr-form-control clr-row">
+                                        <label class="clr-col-12 clr-col-sm-12 clr-col-md-12 clr-col-lg-12 clr-col-xl-12 required-field clr-control-label"
+                                               for="productPriceId">Product Price</label>
+                                        <div class="clr-control-container clr-col-12 clr-col-sm-12 clr-col-md-12 clr-col-lg-12 clr-col-xl-12 w-95">
+                                            <div class="clr-input-wrapper">
+                                                <input type="text" id="productPriceId" name="productPrice" clrinput=""
+                                                       placeholder="Product Price" required="" class="w-95 clr-input">
+                                            </div>
+                                        </div>
+                                    </clr-input-container>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="productCloseButton" class="btn btn-outline">Close</button>
+                    <button id="productSaveButton" class="btn btn-primary" disabled>Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/script_popup.js') }}"></script>
 </body>
 </html>
