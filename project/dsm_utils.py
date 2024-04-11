@@ -230,7 +230,7 @@ if __name__ == "__main__":
     parser.add_argument('--deploymentName', required=True, help="Deployment Name")
 
     args = parser.parse_args()
-    # checks if the targetSite is chosen
+    # checks if the targetSite is chosen and if the DSM parameters are valid
     try:
         outputs = []
         # create a DSM client instance
