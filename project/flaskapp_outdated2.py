@@ -8,10 +8,14 @@ STATIC_DIR = os.path.abspath('./static')
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 
 # Set db creds
-connection_string = "CONNECTION_STRING"
+database = "DBNAME"
+user = "ADMINNAME"
+password = "ADMINPASSWORD"
+host = "HOSTNAME"
 
 # Connect to the database
-conn = psycopg2.connect(connection_string)
+conn = psycopg2.connect(database=database, user=user,
+                        password=password, host=host, port="5432")
 
 # create a cursor
 cur = conn.cursor()
@@ -38,7 +42,10 @@ conn.close()
 @app.route('/')
 def index():
     # Connect to the database
-    conn = psycopg2.connect(connection_string)
+    conn = psycopg2.connect(database=database,
+                            user=user,
+                            password=password,
+                            host=host, port="5432")
 
     # create a cursor
     cur = conn.cursor()
@@ -58,7 +65,10 @@ def index():
 
 @app.route('/create', methods=['POST'])
 def create():
-    conn = psycopg2.connect(connection_string)
+    conn = psycopg2.connect(database=database,
+                            user=user,
+                            password=password,
+                            host=host, port="5432")
 
     cur = conn.cursor()
 
@@ -84,7 +94,10 @@ def create():
 
 @app.route('/update', methods=['POST'])
 def update():
-    conn = psycopg2.connect(connection_string)
+    conn = psycopg2.connect(database=database,
+                            user=user,
+                            password=password,
+                            host=host, port="5432")
 
     cur = conn.cursor()
 
@@ -105,7 +118,9 @@ def update():
 
 @app.route('/delete', methods=['POST'])
 def delete():
-    conn = psycopg2.connect(connection_string)
+    conn = psycopg2.connect(database=database, user=user,
+                            password=password,
+                            host=host, port="5432")
     cur = conn.cursor()
 
     # Get the data from the form
