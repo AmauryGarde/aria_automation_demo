@@ -7,6 +7,7 @@ import ssl
 import base64
 import os
 import argparse
+import time
 
 
 class DsmClient:
@@ -135,6 +136,28 @@ class DsmClient:
 
         return out["status"]["connection"]["host"], out["status"]["connection"]["port"]
 
+    def getDBConnectionStatus(self, inputs):
+        """
+        Retrieves the database connection status based on the inputs.
+
+        Args:
+            inputs (dict): The input parameters for the connection status.
+
+        Returns:
+            str: The database connection status.
+        """
+        dbengine = (inputs["dbengine"]).lower()
+        deployment_name = inputs["deploymentName"]
+
+        if dbengine == "postgres":
+            deployment_engine = "postgresclusters"
+        else:
+            deployment_engine = "mysqlclusters"
+
+        path = f"/apis/databases.dataservices.vmware.com/v1alpha1/namespaces/default/{deployment_engine}/{deployment_name}/status"
+        while self.get(path)["status"].get("alertLevel") != "OK":
+            time.sleep(30)
+
 
 def checkDsmParams(envlist):
     """
@@ -223,25 +246,8 @@ if __name__ == "__main__":
             "deploymentName": args.deploymentName
         }
 
-        connectionString = dsmClient.getDBConnectionString(inputs)
-        print(connectionString)
-    except Exception as e:
-        print(f"An error occurred: {e}")
+        dsmClient.getDBConnectionStatus(inputs)
 
-if __name__ == "__main__":
-    import argparse
-
-    try:
-        dsmParams = getDsmParamsForVro(site)
-        dsmClient = DsmClient(dsmParams['dsmHost'], dsmParams['dsmUserID'], dsmParams['dsmPassword'])
-        # Replace 'inputs' with actual inputs required for getDBConnectionString
-        inputs = {
-            'dbengine': 'mysql',  # Or 'postgres', depending on your requirements
-            'adminUsername': 'admin',
-            'conn_host': 'localhost',
-            'conn_port': 3306,
-            'deploymentName': 'your_deployment_name'
-        }
         connectionString = dsmClient.getDBConnectionString(inputs)
         print(connectionString)
     except Exception as e:
