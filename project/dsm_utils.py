@@ -109,7 +109,7 @@ class DsmClient:
         decoded_password = base64.b64decode(password)
         db_password = decoded_password.decode("utf-8")
 
-        connection_string = dbengine + "://" + admin_username + ":" + db_password + "@" + conn_host + ":" + conn_port + "/" + db_name
+        connection_string = dbengine + "://" + admin_username + ":" + db_password + "@" + conn_host + ":" + str(conn_port) + "/" + db_name
         return connection_string
 
     def getDBConnectionInfo(self, inputs):
