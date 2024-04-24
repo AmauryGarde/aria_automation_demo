@@ -249,6 +249,14 @@ if __name__ == "__main__":
         dsmClient.getDBConnectionStatus(inputs)
 
         connectionString = dsmClient.getDBConnectionString(inputs)
-        print(connectionString)
+        # print(connectionString)
+
+        config = {
+            "connection_string": connectionString
+        }
+        
+        # Save the configuration
+        with open('config.json', 'w') as f:
+            json.dump(config, f, indent=4)
     except Exception as e:
         print(f"An error occurred: {e}")
