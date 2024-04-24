@@ -1,14 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for
 import psycopg2
 import os
+import json
 
 TEMPLATE_DIR = os.path.abspath('./templates')
 STATIC_DIR = os.path.abspath('./static')
 
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 
+with open('config.json', 'r') as f:
+    config = json.load(f)
+    
 # Set db creds
-connection_string = os.getenv("CONNECTION_STRING")
+connection_string = config["connection_string"]
 
 # Connect to the database
 conn = psycopg2.connect(connection_string)
