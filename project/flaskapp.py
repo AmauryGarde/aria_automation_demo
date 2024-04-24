@@ -8,7 +8,7 @@ STATIC_DIR = os.path.abspath('./static')
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 
 # Set db creds
-connection_string = "CONNECTION_STRING"
+connection_string = os.getenv("CONNECTION_STRING")
 
 # Connect to the database
 conn = psycopg2.connect(connection_string)
